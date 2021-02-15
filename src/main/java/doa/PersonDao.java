@@ -1,7 +1,12 @@
 package doa;
 
 import beans.Person;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class PersonDao {
 
@@ -29,6 +34,18 @@ public class PersonDao {
                 person.getName(), person.getLastName(), person.getAge(), person.getId());
     }
 
+    public Boolean insertPersonByPreparedStatement(final Person person){
+        return jdbcTemplate.execute("insert into Person values(?, ?, ?, ?)", new PreparedStatementCallback<Boolean>() {
+            @Override
+            public Boolean doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException, DataAccessException {
+                preparedStatement.setString(1, person.getName());
+                preparedStatement.setString(2, person.getLastName());
+                preparedStatement.setInt(3, person.getAge());
+                preparedStatement.setInt(4, person.getId());
 
+                return preparedStatement.execute();
+            }
+        });
+    }
 
 }

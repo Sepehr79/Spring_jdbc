@@ -42,4 +42,15 @@ public class Main {
 
         System.out.println(result);
     }
+
+    @Test
+    public void testInsertPersonByPreparedStatement(){
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        PersonDao personDao = (PersonDao) applicationContext.getBean("dao");
+
+        boolean result = personDao.insertPersonByPreparedStatement(new Person("ahmad", "salimi", 30, 456454));
+
+        System.out.println(result);
+    }
 }
